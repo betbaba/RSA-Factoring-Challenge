@@ -1,33 +1,26 @@
-#!/usr/bin/python3
-"""Module that factorize as many numbers as possible
- into a product of two smaller numbers."""
-from sys import argv
+#!/usr/bin/env python3
 
+import sys
+import math
 
-def factorize(value):
-    """"print a simple descomposition of an integer > 1"""
-    i = 2
+def factorize(n):
+    for i in range(2, int(math.sqrt(n))+1):
+        if n % i == 0:
+            return i, n//i
+    return None, None
 
-    if value < 2:
-        return
-    print()
-    print(value, "<- value-bef")
-    while value % i:
-        i += 1
-    print("{:.0f}={:.0f}*{:.0f}".format(value, value / i, i))
-    print(value, "<- value-aft")
-    print()
+if len(sys.argv) != 2:
+    print("Usage: factors <file>")
+    sys.exit(1)
 
-if len(argv) != 2:
-    exit()
+filename = sys.argv[1]
 
 try:
-    with open(argv[1]) as file:
-        line = file.readline()
-
-        while line != "":
-            value = int(line.split('\n')[0])
-            factorize(value)
-            line = file.readline()
-except:
-    pass
+    with open(filename, 'r') as f:
+        for line in f:
+            n = int(line.strip())
+            p, q = factorize(n)
+            print("{}={}*{}".format(n, p, q))
+except IOError:
+    print("Error: Could not read file", filename)
+    sys.exit(1)
